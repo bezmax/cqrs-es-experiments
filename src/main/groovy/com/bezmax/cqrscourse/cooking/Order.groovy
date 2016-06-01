@@ -1,13 +1,17 @@
 package com.bezmax.cqrscourse.cooking
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
 class Order {
+    private static GSON = new GsonBuilder().setPrettyPrinting().create()
+
     private JsonObject rootElement
 
     Order(String data) {
-        rootElement = new Gson().fromJson(data, JsonObject.class)
+        rootElement = GSON.fromJson(data, JsonObject.class)
     }
 
     Order() {
@@ -73,8 +77,15 @@ class Order {
         rootElement.getAsJsonArray("lineItems").collect {it -> new Item(it.asJsonObject)}
     }
 
+    void setItems(List<Item> items) {
+        rootElement.remove("lineItems")
+        def itemArray = new JsonArray()
+        items.each { itemArray.add(it.rootElement)}
+        rootElement.add("lineItems",  itemArray)
+    }
+
     String serialize() {
-        rootElement.toString()
+        GSON.toJson(rootElement)
     }
 
     static class Item {
@@ -82,6 +93,10 @@ class Order {
 
         Item(JsonObject root) {
             this.rootElement = root
+        }
+
+        Item() {
+            this.rootElement = new JsonObject()
         }
 
         BigDecimal getPrice() {

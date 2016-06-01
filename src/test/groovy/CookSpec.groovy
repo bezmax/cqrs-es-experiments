@@ -1,5 +1,5 @@
 import com.bezmax.cqrscourse.cooking.CanHandleOrder
-import com.bezmax.cqrscourse.cooking.Cook
+import com.bezmax.cqrscourse.cooking.actors.Cook
 import com.bezmax.cqrscourse.cooking.Order
 import spock.lang.Specification
 

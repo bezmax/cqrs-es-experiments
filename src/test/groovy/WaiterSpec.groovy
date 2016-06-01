@@ -1,6 +1,6 @@
 import com.bezmax.cqrscourse.cooking.CanHandleOrder
 import com.bezmax.cqrscourse.cooking.Order
-import com.bezmax.cqrscourse.cooking.Waiter
+import com.bezmax.cqrscourse.cooking.actors.Waiter
 import spock.lang.Specification
 
 
