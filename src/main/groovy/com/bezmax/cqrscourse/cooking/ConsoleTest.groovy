@@ -44,9 +44,14 @@ class ConsoleTest {
         port(8080)
         staticFiles.location("/web")
 
-        get("/stats", "application/json", {req, resp ->
+        get("/queueStats", "application/json", {req, resp ->
             resp.type("application/json")
-            strategy.messageStats
+            strategy.queueStats
+        }, new JsonTransformer());
+
+        get("/topicStats", "application/json", {req, resp ->
+            resp.type("application/json")
+            strategy.topicStats
         }, new JsonTransformer());
 
         post("/addOrders/:count", {req, resp ->

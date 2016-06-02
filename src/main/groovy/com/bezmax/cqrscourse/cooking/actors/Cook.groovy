@@ -1,6 +1,6 @@
 package com.bezmax.cqrscourse.cooking.actors
 
-import com.bezmax.cqrscourse.cooking.CanHandle
+import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
 
@@ -8,7 +8,7 @@ import com.bezmax.cqrscourse.cooking.messages.FoodCooked
 import com.bezmax.cqrscourse.cooking.messages.OrderPlaced
 import org.slf4j.LoggerFactory
 
-class Cook implements CanHandle<OrderPlaced> {
+class Cook implements Handles<OrderPlaced> {
     static LOGGER = LoggerFactory.getLogger(Cook)
 
     static cookbook = [
@@ -25,7 +25,7 @@ class Cook implements CanHandle<OrderPlaced> {
         Order o = msg.order
         o.ingredients = o.items.collect {cookbook[it.item]}.join(", ")
         Thread.sleep(cookTime)
-        pub.publish(FoodCooked.toString(), new FoodCooked(order: o))
+        pub.publish(new FoodCooked(order: o))
     }
 
     @Override

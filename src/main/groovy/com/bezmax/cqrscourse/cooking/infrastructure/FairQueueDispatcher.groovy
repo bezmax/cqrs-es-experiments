@@ -1,11 +1,11 @@
 package com.bezmax.cqrscourse.cooking.infrastructure
 
-import com.bezmax.cqrscourse.cooking.CanHandle
+import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.messages.MessageBase
 import org.slf4j.LoggerFactory
 
 
-class FairQueueDispatcher<M extends MessageBase> implements CanHandle<M> {
+class FairQueueDispatcher<M extends MessageBase> implements Handles<M> {
     static LOGGER = LoggerFactory.getLogger(FairQueueDispatcher)
 
     def name = "FairDispatcher"

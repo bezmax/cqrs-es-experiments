@@ -1,8 +1,7 @@
 package com.bezmax.cqrscourse.cooking.actors
 
-import com.bezmax.cqrscourse.cooking.CanHandle
-import com.bezmax.cqrscourse.cooking.HasMessageStats
-import com.bezmax.cqrscourse.cooking.Order
+import com.bezmax.cqrscourse.cooking.Handles
+import com.bezmax.cqrscourse.cooking.HasQueueStats
 import com.bezmax.cqrscourse.cooking.infrastructure.MessageStats
 import com.bezmax.cqrscourse.cooking.messages.OrderPaid
 import org.slf4j.LoggerFactory
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class Printer implements CanHandle<OrderPaid>, HasMessageStats {
+class Printer implements Handles<OrderPaid>, HasQueueStats {
     static LOGGER = LoggerFactory.getLogger(Printer)
 
     AtomicInteger counter = new AtomicInteger(0)
@@ -21,7 +20,13 @@ class Printer implements CanHandle<OrderPaid>, HasMessageStats {
         LOGGER.info(msg.order.serialize())
     }
 
-    List<MessageStats> getMessageStats() {
+    List<MessageStats> getQueueStats() {
         [] + new MessageStats(name: "ResultPrinter", count: counter.get())
+    }
+
+
+    @Override
+    public String toString() {
+        "Printer"
     }
 }

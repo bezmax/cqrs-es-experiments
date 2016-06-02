@@ -1,12 +1,12 @@
 package com.bezmax.cqrscourse.cooking.infrastructure
 
-import com.bezmax.cqrscourse.cooking.CanHandle
+import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.CanStart
-import com.bezmax.cqrscourse.cooking.HasMessageStats
+import com.bezmax.cqrscourse.cooking.HasQueueStats
 import com.bezmax.cqrscourse.cooking.messages.MessageBase
 
-class ThreadedDispatcher<M extends MessageBase, H extends CanHandle<M>> implements CanHandle<M>, CanStart, HasMessageStats {
-    private CanHandle mainDispatcher
+class ThreadedDispatcher<M extends MessageBase, H extends Handles<M>> implements Handles<M>, CanStart, HasQueueStats {
+    private Handles mainDispatcher
     private QueuedDispatcher beforeQueue
     private List<QueuedDispatcher> queuedDispatchers
 
@@ -36,11 +36,12 @@ class ThreadedDispatcher<M extends MessageBase, H extends CanHandle<M>> implemen
         queuedDispatchers.each {it.start()}
     }
 
-    List<MessageStats> getMessageStats() {
-        [] + beforeQueue.getMessageStats() + queuedDispatchers.sum {it.getMessageStats()}
+    List<MessageStats> getQueueStats() {
+        [] + beforeQueue.queueStats + queuedDispatchers.sum {it.queueStats}
     }
 
     String toString() {
-        name
+        def subNames = queuedDispatchers.collect {it.toString()}.join(", ")
+        "$name -> $subNames"
     }
 }

@@ -2,6 +2,7 @@ package com.bezmax.cqrscourse.cooking
 
 import com.bezmax.cqrscourse.cooking.messages.MessageBase
 
-interface CanForward<M extends MessageBase> {
-    void setForwardTo(CanHandle<M> handler)
+
+interface Handles<M extends MessageBase> {
+    void handle(M msg)
 }

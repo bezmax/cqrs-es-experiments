@@ -1,6 +1,6 @@
 package com.bezmax.cqrscourse.cooking.actors
 
-import com.bezmax.cqrscourse.cooking.CanHandle
+import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
 
@@ -9,7 +9,7 @@ import com.bezmax.cqrscourse.cooking.messages.OrderPriced
 import org.slf4j.LoggerFactory
 
 
-class AssistantManager implements CanHandle<FoodCooked> {
+class AssistantManager implements Handles<FoodCooked> {
     static LOGGER = LoggerFactory.getLogger(AssistantManager)
 
     def pricebook = [
@@ -36,6 +36,6 @@ class AssistantManager implements CanHandle<FoodCooked> {
         }
         o.tax = 0.21
         Thread.sleep(500)
-        pub.publish(OrderPriced.toString(), new OrderPriced(order: o))
+        pub.publish(new OrderPriced(order: o))
     }
 }

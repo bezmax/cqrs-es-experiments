@@ -6,10 +6,30 @@
     <title>Restaurant monitoring</title>
 
     <style>
-        #stats-container, #action-container {
+        body {
+        }
+
+        #logo {
+            margin: auto;
+            display: block;
+        }
+
+        #stats-wrapper {
+            /*display: flex;*/
+        }
+
+        #queue-stats-container,
+        #action-container,
+        #topic-stats-container {
             width: 600px;
             margin: auto;
             padding-bottom: 20px;
+        }
+
+        #topic-stats-table .subscribers ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .stat-table {
@@ -20,9 +40,9 @@
             display: table-row;
         }
 
-        .stat-table .queue-name, .stat-table .msg-count {
+        .stat-table .cell {
             display: table-cell;
-            padding: 3px;
+            padding: 5px;
             border-bottom: 1px solid lightgrey;
         }
 
@@ -37,27 +57,59 @@
     </style>
 
     <script>
-        function toRow(stats) {
+        function queueStatsToRow(stats) {
             return $("<div></div>").addClass("row")
-                .append($("<div></div>").addClass("queue-name").text(stats.name))
-                .append($("<div></div>").addClass("msg-count").text(stats.count));
+                .append($("<div></div>").addClass("queue-name cell").text(stats.name))
+                .append($("<div></div>").addClass("msg-count cell").text(stats.count));
         }
 
-        function toTable(allStats) {
+        function queueStatsToTable(allStats) {
             var $statTable = $("<div></div>").addClass("stat-table");
             for (var i=0; i<allStats.length; i++) {
-                $statTable.append(toRow(allStats[i]));
+                $statTable.append(queueStatsToRow(allStats[i]));
             }
             return $statTable;
         }
 
         function updateQueueStatus() {
             $.ajax({
-                url: "/stats"
+                url: "/queueStats"
             }).done(function (data) {
-                $("#stats-container")
+                $("#queue-stats-table")
                         .empty()
-                        .append(toTable(data))
+                        .append(queueStatsToTable(data))
+            });
+        }
+
+        function subsToList(subNames) {
+            var $container = $("<ul/>");
+            for (var i=0; i<subNames.length; i++) {
+                $container.append($("<li/>").text(subNames[i]));
+            }
+            return $container;
+        }
+
+        function topicStatsToRow(stats) {
+            return $("<div></div>").addClass("row")
+                    .append($("<div></div>").addClass("topic-name cell").text(stats.topic))
+                    .append($("<div></div>").addClass("subscribers cell").append(subsToList(stats.subscribers)));
+        }
+
+        function topicStatsToTable(allStats) {
+            var $statTable = $("<div></div>").addClass("stat-table");
+            for (var i=0; i<allStats.length; i++) {
+                $statTable.append(topicStatsToRow(allStats[i]));
+            }
+            return $statTable;
+        }
+
+        function updateTopicStatus() {
+            $.ajax({
+                url: "/topicStats"
+            }).done(function (data) {
+                $("#topic-stats-table")
+                        .empty()
+                        .append(topicStatsToTable(data))
             });
         }
 
@@ -70,10 +122,13 @@
 
         $(function() {
             window.setInterval(updateQueueStatus, 300);
+            window.setInterval(updateTopicStatus, 300);
         })
     </script>
 </head>
 <body>
+
+<img id="logo" src="logo.png"/>
 
 <div id="action-container">
     <button onclick="addOrders(1);">Add 1 order</button>
@@ -81,6 +136,15 @@
     <button onclick="addOrders(100);">Add 100 orders</button>
 </div>
 
-<div id="stats-container"></div>
+<div id="stats-wrapper">
+    <div id="queue-stats-container">
+        <h2>Queue stats</h2>
+        <div id="queue-stats-table"></div>
+    </div>
+    <div id="topic-stats-container">
+        <h2>Subscription stats</h2>
+        <div id="topic-stats-table"></div>
+    </div>
+</div>
 </body>
 </html>

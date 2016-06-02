@@ -29,7 +29,7 @@ class Waiter {
         ]
         LOGGER.debug("Waiter: {}", order)
 
-        pub.publish(OrderPlaced.toString(), new OrderPlaced(order: order))
+        pub.publish(new OrderPlaced(order: order))
         return order.id
     }
 

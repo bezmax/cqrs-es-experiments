@@ -1,4 +1,4 @@
-import com.bezmax.cqrscourse.cooking.CanHandle
+import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.actors.Cook
 import com.bezmax.cqrscourse.cooking.Order
 import spock.lang.Specification
@@ -7,7 +7,7 @@ import spock.lang.Specification
 class CookSpec extends Specification {
     def "cook adds ingredients"() {
         setup:
-        def nextHandler = Mock(CanHandle)
+        def nextHandler = Mock(Handles)
         def cook = new Cook(nextHandler)
         def order = new Order()
 
