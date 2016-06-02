@@ -1,17 +1,20 @@
 package com.bezmax.cqrscourse.cooking.actors
 
-import com.bezmax.cqrscourse.cooking.CanHandleOrder
 import com.bezmax.cqrscourse.cooking.Order
+import com.bezmax.cqrscourse.cooking.Publisher
+
+import com.bezmax.cqrscourse.cooking.messages.OrderPlaced
+import org.slf4j.LoggerFactory
 
 
 class Waiter {
-    CanHandleOrder orderHandler
+    static LOGGER = LoggerFactory.getLogger(Waiter)
 
-    Waiter(CanHandleOrder orderHandler) {
-        this.orderHandler = orderHandler
-    }
+    def name
+    Publisher pub
 
     UUID createOrder() {
+        LOGGER.debug("Waiter creates new order")
         def order = new Order()
         order.tableNumber = 23
         order.items = [
@@ -24,7 +27,14 @@ class Waiter {
                     quantity: 5
             )
         ]
-        orderHandler.handle(order)
+        LOGGER.debug("Waiter: {}", order)
+
+        pub.publish(OrderPlaced.toString(), new OrderPlaced(order: order))
         return order.id
+    }
+
+    @Override
+    public String toString() {
+        "Waiter[$name]"
     }
 }

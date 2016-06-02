@@ -1,6 +1,5 @@
 package com.bezmax.cqrscourse.cooking
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -87,6 +86,12 @@ class Order {
     String serialize() {
         GSON.toJson(rootElement)
     }
+
+    @Override
+    public String toString() {
+        "Order[$id]"
+    }
+
 
     static class Item {
         private JsonObject rootElement

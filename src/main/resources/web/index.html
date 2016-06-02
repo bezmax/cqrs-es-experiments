@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Restaurant monitoring</title>
+
+    <style>
+        #stats-container, #action-container {
+            width: 600px;
+            margin: auto;
+            padding-bottom: 20px;
+        }
+
+        .stat-table {
+            display: table;
+        }
+
+        .stat-table .row {
+            display: table-row;
+        }
+
+        .stat-table .queue-name, .stat-table .msg-count {
+            display: table-cell;
+            padding: 3px;
+            border-bottom: 1px solid lightgrey;
+        }
+
+        .stat-table .queue-name {
+            min-width: 400px;
+            border-right: 1px solid lightgrey;
+        }
+
+        .stat-table .msg-count {
+            min-width: 200px;
+        }
+    </style>
+
+    <script>
+        function toRow(stats) {
+            return $("<div></div>").addClass("row")
+                .append($("<div></div>").addClass("queue-name").text(stats.name))
+                .append($("<div></div>").addClass("msg-count").text(stats.count));
+        }
+
+        function toTable(allStats) {
+            var $statTable = $("<div></div>").addClass("stat-table");
+            for (var i=0; i<allStats.length; i++) {
+                $statTable.append(toRow(allStats[i]));
+            }
+            return $statTable;
+        }
+
+        function updateQueueStatus() {
+            $.ajax({
+                url: "/stats"
+            }).done(function (data) {
+                $("#stats-container")
+                        .empty()
+                        .append(toTable(data))
+            });
+        }
+
+        function addOrders(cnt) {
+            $.ajax({
+                method: "POST",
+                url: "/addOrders/"+cnt
+            }).done(function (data) {})
+        }
+
+        $(function() {
+            window.setInterval(updateQueueStatus, 300);
+        })
+    </script>
+</head>
+<body>
+
+<div id="action-container">
+    <button onclick="addOrders(1);">Add 1 order</button>
+    <button onclick="addOrders(10);">Add 10 orders</button>
+    <button onclick="addOrders(100);">Add 100 orders</button>
+</div>
+
+<div id="stats-container"></div>
+</body>
+</html>
