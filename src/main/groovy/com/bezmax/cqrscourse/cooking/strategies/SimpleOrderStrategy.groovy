@@ -3,19 +3,18 @@ package com.bezmax.cqrscourse.cooking.strategies
 import com.bezmax.cqrscourse.cooking.HasQueueStats
 import com.bezmax.cqrscourse.cooking.HasTopicStats
 import com.bezmax.cqrscourse.cooking.Publisher
-import com.bezmax.cqrscourse.cooking.actors.AssistantManager
-import com.bezmax.cqrscourse.cooking.actors.Cashier
-import com.bezmax.cqrscourse.cooking.actors.Cook
-import com.bezmax.cqrscourse.cooking.actors.Printer
-import com.bezmax.cqrscourse.cooking.actors.Waiter
+import com.bezmax.cqrscourse.cooking.actors.*
 import com.bezmax.cqrscourse.cooking.infrastructure.MessageStats
 import com.bezmax.cqrscourse.cooking.infrastructure.SimplePublisher
 import com.bezmax.cqrscourse.cooking.infrastructure.ThreadedDispatcher
 import com.bezmax.cqrscourse.cooking.infrastructure.TopicStats
-import com.bezmax.cqrscourse.cooking.messages.FoodCooked
-import com.bezmax.cqrscourse.cooking.messages.OrderPaid
-import com.bezmax.cqrscourse.cooking.messages.OrderPlaced
-import com.bezmax.cqrscourse.cooking.messages.OrderPriced
+import com.bezmax.cqrscourse.cooking.messages.commands.CollectPayment
+import com.bezmax.cqrscourse.cooking.messages.commands.CookFood
+import com.bezmax.cqrscourse.cooking.messages.commands.PriceOrder
+import com.bezmax.cqrscourse.cooking.messages.events.FoodCooked
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPaid
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPlaced
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPriced
 
 class SimpleOrderStrategy implements HasQueueStats, HasTopicStats {
     List<Waiter> waiters
@@ -43,10 +42,28 @@ class SimpleOrderStrategy implements HasQueueStats, HasTopicStats {
         cookPool = new ThreadedDispatcher(cooks)
         cookPool.name = "CookPool"
 
-        publisher.subscribe(OrderPlaced, cookPool)
-        publisher.subscribe(FoodCooked, assistPool)
-        publisher.subscribe(OrderPriced, cashierPool)
+        publisher.subscribe(CookFood, cookPool)
+        publisher.subscribe(PriceOrder, assistPool)
+        publisher.subscribe(CollectPayment, cashierPool)
         publisher.subscribe(OrderPaid, printer)
+
+        publisher.subscribe(OrderPlaced, new SimpleRoute(
+                publisher: publisher,
+                forwardTo: CookFood.name,
+                transformer: {OrderPlaced p -> new CookFood(order: p.order)}
+        ))
+
+        publisher.subscribe(FoodCooked, new SimpleRoute(
+                publisher: publisher,
+                forwardTo: PriceOrder.name,
+                transformer: {FoodCooked p -> new PriceOrder(order: p.order)}
+        ))
+
+        publisher.subscribe(OrderPriced, new SimpleRoute(
+                publisher: publisher,
+                forwardTo: CollectPayment.name,
+                transformer: {OrderPriced p -> new CollectPayment(order: p.order)}
+        ))
 
         cashierPool.start()
         assistPool.start()

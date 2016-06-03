@@ -2,11 +2,17 @@ package com.bezmax.cqrscourse.cooking.messages
 
 
 abstract class MessageBase {
-    UUID uid = UUID.randomUUID()
+    UUID msgId = UUID.randomUUID()
+    UUID corrId
+    UUID causeId
 
+    MessageBase(UUID corrId, UUID causeId) {
+        this.corrId = corrId
+        this.causeId = causeId
+    }
 
     @Override
     public String toString() {
-        "Message[$uid]"
+        "Message[$msgId, $corrId, $causeId]"
     }
 }

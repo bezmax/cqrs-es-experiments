@@ -3,19 +3,19 @@ package com.bezmax.cqrscourse.cooking.actors
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
-
-import com.bezmax.cqrscourse.cooking.messages.OrderPaid
-import com.bezmax.cqrscourse.cooking.messages.OrderPriced
+import com.bezmax.cqrscourse.cooking.messages.commands.CollectPayment
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPaid
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPriced
 import org.slf4j.LoggerFactory
 
 
-class Cashier implements Handles<OrderPriced> {
+class Cashier implements Handles<CollectPayment> {
     static LOGGER = LoggerFactory.getLogger(Cashier)
 
     def name
     Publisher pub
 
-    void handle(OrderPriced msg) {
+    void handle(CollectPayment msg) {
         LOGGER.debug("Cashier: {}", msg)
 
         Order o = msg.order

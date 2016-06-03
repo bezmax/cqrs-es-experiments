@@ -3,7 +3,7 @@ package com.bezmax.cqrscourse.cooking.actors
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
 
-import com.bezmax.cqrscourse.cooking.messages.OrderPlaced
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPlaced
 import org.slf4j.LoggerFactory
 
 

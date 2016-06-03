@@ -3,13 +3,13 @@ package com.bezmax.cqrscourse.cooking.actors
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
-
-import com.bezmax.cqrscourse.cooking.messages.FoodCooked
-import com.bezmax.cqrscourse.cooking.messages.OrderPriced
+import com.bezmax.cqrscourse.cooking.messages.commands.PriceOrder
+import com.bezmax.cqrscourse.cooking.messages.events.FoodCooked
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPriced
 import org.slf4j.LoggerFactory
 
 
-class AssistantManager implements Handles<FoodCooked> {
+class AssistantManager implements Handles<PriceOrder> {
     static LOGGER = LoggerFactory.getLogger(AssistantManager)
 
     def pricebook = [
@@ -25,7 +25,7 @@ class AssistantManager implements Handles<FoodCooked> {
         "Assistant[$name]"
     }
 
-    void handle(FoodCooked msg) {
+    void handle(PriceOrder msg) {
         LOGGER.debug("Assistant Manager: {}", msg)
 
         Order o = msg.order

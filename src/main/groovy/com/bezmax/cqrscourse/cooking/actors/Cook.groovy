@@ -3,12 +3,12 @@ package com.bezmax.cqrscourse.cooking.actors
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.Publisher
-
-import com.bezmax.cqrscourse.cooking.messages.FoodCooked
-import com.bezmax.cqrscourse.cooking.messages.OrderPlaced
+import com.bezmax.cqrscourse.cooking.messages.commands.CookFood
+import com.bezmax.cqrscourse.cooking.messages.events.FoodCooked
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPlaced
 import org.slf4j.LoggerFactory
 
-class Cook implements Handles<OrderPlaced> {
+class Cook implements Handles<CookFood> {
     static LOGGER = LoggerFactory.getLogger(Cook)
 
     static cookbook = [
@@ -20,7 +20,7 @@ class Cook implements Handles<OrderPlaced> {
     def cookTime = 3000
     Publisher pub
 
-    void handle(OrderPlaced msg) {
+    void handle(CookFood msg) {
         LOGGER.debug("{}: {}", this, msg)
         Order o = msg.order
         o.ingredients = o.items.collect {cookbook[it.item]}.join(", ")

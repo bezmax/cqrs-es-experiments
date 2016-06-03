@@ -3,7 +3,7 @@ package com.bezmax.cqrscourse.cooking.actors
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.HasQueueStats
 import com.bezmax.cqrscourse.cooking.infrastructure.MessageStats
-import com.bezmax.cqrscourse.cooking.messages.OrderPaid
+import com.bezmax.cqrscourse.cooking.messages.events.OrderPaid
 import org.slf4j.LoggerFactory
 
 import java.util.concurrent.atomic.AtomicInteger
