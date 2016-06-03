@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <logger name="com.bezmax" level="info"
+    <logger name="com.bezmax" level="trace"
             additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>

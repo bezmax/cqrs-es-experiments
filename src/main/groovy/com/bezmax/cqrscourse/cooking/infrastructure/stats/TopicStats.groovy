@@ -1,4 +1,4 @@
-package com.bezmax.cqrscourse.cooking.infrastructure
+package com.bezmax.cqrscourse.cooking.infrastructure.stats
 
 class TopicStats {
     String topic

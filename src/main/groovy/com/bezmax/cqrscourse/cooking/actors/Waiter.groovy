@@ -1,8 +1,7 @@
 package com.bezmax.cqrscourse.cooking.actors
 
 import com.bezmax.cqrscourse.cooking.Order
-import com.bezmax.cqrscourse.cooking.Publisher
-
+import com.bezmax.cqrscourse.cooking.infrastructure.Publisher
 import com.bezmax.cqrscourse.cooking.messages.events.OrderPlaced
 import org.slf4j.LoggerFactory
 
@@ -11,6 +10,7 @@ class Waiter {
     static LOGGER = LoggerFactory.getLogger(Waiter)
 
     def name
+
     Publisher pub
 
     UUID createOrder() {
@@ -29,7 +29,10 @@ class Waiter {
         ]
         LOGGER.debug("Waiter: {}", order)
 
-        pub.publish(new OrderPlaced(order: order))
+        if (Math.random() < 0.2) {
+            order.shady = true
+        }
+        pub.publish(new OrderPlaced(order: order), order.id.toString())
         return order.id
     }
 

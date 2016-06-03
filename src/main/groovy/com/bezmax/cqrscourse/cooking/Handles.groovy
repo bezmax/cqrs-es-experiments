@@ -1,8 +1,7 @@
 package com.bezmax.cqrscourse.cooking
 
-import com.bezmax.cqrscourse.cooking.messages.MessageBase
+import com.bezmax.cqrscourse.cooking.infrastructure.Exchange
 
-
-interface Handles<M extends MessageBase> {
-    void handle(M msg)
+interface Handles<M> {
+    void handle(Exchange<M> exchange, M msg)
 }

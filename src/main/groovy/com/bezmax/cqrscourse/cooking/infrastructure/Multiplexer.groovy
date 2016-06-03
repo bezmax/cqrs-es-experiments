@@ -7,7 +7,7 @@ import com.bezmax.cqrscourse.cooking.messages.MessageBase
 class Multiplexer<M extends MessageBase> implements Handles<M> {
     List<Handles<M>> orderHandlers
 
-    void handle(M msg) {
-        orderHandlers.each {it.handle(msg)}
+    void handle(Exchange<M> exchange, M msg) {
+        orderHandlers.each {it.handle(exchange, msg)}
     }
 }

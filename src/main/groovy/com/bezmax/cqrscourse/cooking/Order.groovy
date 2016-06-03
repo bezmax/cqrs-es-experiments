@@ -2,6 +2,7 @@ package com.bezmax.cqrscourse.cooking
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
 class Order {
@@ -25,6 +26,16 @@ class Order {
     void setId(UUID uuid) {
         rootElement.remove("id")
         rootElement.addProperty("id", uuid.toString())
+    }
+
+    boolean isShady() {
+        def shady = rootElement.get("shady")
+        return shady != null ? shady.asBoolean : false
+    }
+
+    void setShady(boolean shady) {
+        rootElement.remove("shady")
+        rootElement.addProperty("shady", shady)
     }
 
     int getTableNumber() {

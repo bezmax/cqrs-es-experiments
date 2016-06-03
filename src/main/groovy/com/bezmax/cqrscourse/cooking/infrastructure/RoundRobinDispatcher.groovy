@@ -9,9 +9,9 @@ class RoundRobinDispatcher<M extends MessageBase> implements Handles<M> {
     static LOGGER = LoggerFactory.getLogger(RoundRobinDispatcher)
     Queue<Handles<M>> orderHandlers
 
-    void handle(M msg) {
-        LOGGER.debug("${msg}")
-        orderHandlers.peek().handle(msg)
+    void handle(Exchange<M> exchange, M msg) {
+        LOGGER.debug("${exchange}")
+        orderHandlers.peek().handle(exchange, msg)
         orderHandlers << orderHandlers.remove()
     }
 }

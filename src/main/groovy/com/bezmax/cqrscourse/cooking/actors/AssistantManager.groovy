@@ -1,10 +1,9 @@
 package com.bezmax.cqrscourse.cooking.actors
 
+import com.bezmax.cqrscourse.cooking.infrastructure.Exchange
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
-import com.bezmax.cqrscourse.cooking.Publisher
 import com.bezmax.cqrscourse.cooking.messages.commands.PriceOrder
-import com.bezmax.cqrscourse.cooking.messages.events.FoodCooked
 import com.bezmax.cqrscourse.cooking.messages.events.OrderPriced
 import org.slf4j.LoggerFactory
 
@@ -18,15 +17,14 @@ class AssistantManager implements Handles<PriceOrder> {
     ]
 
     def name
-    Publisher pub
 
     @Override
     public String toString() {
         "Assistant[$name]"
     }
 
-    void handle(PriceOrder msg) {
-        LOGGER.debug("Assistant Manager: {}", msg)
+    void handle(Exchange<PriceOrder> exchange, PriceOrder msg) {
+        LOGGER.debug("Assistant Manager: {}", exchange)
 
         Order o = msg.order
         o.total = 0
@@ -36,6 +34,7 @@ class AssistantManager implements Handles<PriceOrder> {
         }
         o.tax = 0.21
         Thread.sleep(500)
-        pub.publish(new OrderPriced(order: o))
+
+        exchange.respond(new OrderPriced(order: o))
     }
 }

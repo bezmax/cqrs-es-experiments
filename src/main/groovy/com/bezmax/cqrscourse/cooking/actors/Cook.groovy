@@ -1,11 +1,10 @@
 package com.bezmax.cqrscourse.cooking.actors
 
+import com.bezmax.cqrscourse.cooking.infrastructure.Exchange
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
-import com.bezmax.cqrscourse.cooking.Publisher
 import com.bezmax.cqrscourse.cooking.messages.commands.CookFood
 import com.bezmax.cqrscourse.cooking.messages.events.FoodCooked
-import com.bezmax.cqrscourse.cooking.messages.events.OrderPlaced
 import org.slf4j.LoggerFactory
 
 class Cook implements Handles<CookFood> {
@@ -18,14 +17,14 @@ class Cook implements Handles<CookFood> {
 
     def name
     def cookTime = 3000
-    Publisher pub
 
-    void handle(CookFood msg) {
-        LOGGER.debug("{}: {}", this, msg)
+    void handle(Exchange<CookFood> exchange, CookFood msg) {
+        LOGGER.debug("{}: {}", this, exchange)
         Order o = msg.order
         o.ingredients = o.items.collect {cookbook[it.item]}.join(", ")
         Thread.sleep(cookTime)
-        pub.publish(new FoodCooked(order: o))
+
+        exchange.respond(new FoodCooked(order: o))
     }
 
     @Override

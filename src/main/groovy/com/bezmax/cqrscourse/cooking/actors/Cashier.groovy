@@ -1,11 +1,10 @@
 package com.bezmax.cqrscourse.cooking.actors
 
+import com.bezmax.cqrscourse.cooking.infrastructure.Exchange
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.Order
-import com.bezmax.cqrscourse.cooking.Publisher
 import com.bezmax.cqrscourse.cooking.messages.commands.CollectPayment
 import com.bezmax.cqrscourse.cooking.messages.events.OrderPaid
-import com.bezmax.cqrscourse.cooking.messages.events.OrderPriced
 import org.slf4j.LoggerFactory
 
 
@@ -13,15 +12,15 @@ class Cashier implements Handles<CollectPayment> {
     static LOGGER = LoggerFactory.getLogger(Cashier)
 
     def name
-    Publisher pub
 
-    void handle(CollectPayment msg) {
-        LOGGER.debug("Cashier: {}", msg)
+    void handle(Exchange<CollectPayment> exchange, CollectPayment msg) {
+        LOGGER.debug("Cashier: {}", exchange)
 
         Order o = msg.order
         o.paid = true
         Thread.sleep(500)
-        pub.publish(new OrderPaid(order: o))
+
+        exchange.respond(new OrderPaid(order: o))
     }
 
     @Override

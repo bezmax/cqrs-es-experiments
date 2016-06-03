@@ -4,6 +4,6 @@ import com.bezmax.cqrscourse.cooking.Order
 import com.bezmax.cqrscourse.cooking.messages.MessageBase
 
 
-class OrderPriced extends MessageBase {
+class OrderPriced {
     Order order
 }
