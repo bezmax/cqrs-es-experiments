@@ -13,25 +13,23 @@ class Waiter {
 
     Publisher pub
 
-    UUID createOrder() {
-        LOGGER.debug("Waiter creates new order")
+    UUID createOrder(boolean shady = false) {
+        LOGGER.info("Waiter creates new order")
         def order = new Order()
         order.tableNumber = 23
         order.items = [
-            new Order.Item(
-                    item: "razorblade icecream",
-                    quantity: 2
-            ),
-            new Order.Item(
-                    item: "baked mushroom",
-                    quantity: 5
-            )
+                new Order.Item(
+                        item: "razorblade icecream",
+                        quantity: 2
+                ),
+                new Order.Item(
+                        item: "baked mushroom",
+                        quantity: 5
+                )
         ]
-        LOGGER.debug("Waiter: {}", order)
+        order.shady = shady
 
-        if (Math.random() < 0.2) {
-            order.shady = true
-        }
+        LOGGER.info("Waiter: {}", order)
         pub.publish(new OrderPlaced(order: order), order.id.toString())
         return order.id
     }

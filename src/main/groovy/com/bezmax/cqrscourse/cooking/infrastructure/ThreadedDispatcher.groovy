@@ -5,16 +5,16 @@ import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.infrastructure.stats.HasQueueStats
 import com.bezmax.cqrscourse.cooking.infrastructure.stats.MessageStats
 
-class ThreadedDispatcher<M, H extends Handles<M>> implements Handles<M>, CanStart, HasQueueStats {
+class ThreadedDispatcher<M> implements Handles<M>, CanStart, HasQueueStats {
     private FairQueueDispatcher<M> mainDispatcher
     private QueuedDispatcher<M> beforeQueue
-    private List<QueuedDispatcher> queuedDispatchers
+    private List<QueuedDispatcher<M>> queuedDispatchers
 
     def name = "ThreadedDispatcher"
 
-    public ThreadedDispatcher(List<H> handlers) {
+    public ThreadedDispatcher(List<Handles<M>> handlers) {
         queuedDispatchers = handlers.collect {
-            new QueuedDispatcher(name: "mainQueue", orderHandler: it)
+            new QueuedDispatcher<M>(name: "mainQueue", orderHandler: it)
         }
 
         mainDispatcher =

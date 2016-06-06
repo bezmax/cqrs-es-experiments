@@ -3,34 +3,34 @@ package com.bezmax.cqrscourse.cooking.infrastructure
 import com.bezmax.cqrscourse.cooking.Handles
 import com.bezmax.cqrscourse.cooking.infrastructure.stats.HasTopicStats
 import com.bezmax.cqrscourse.cooking.infrastructure.stats.TopicStats
-import com.bezmax.cqrscourse.cooking.messages.MessageBase
+import com.bezmax.cqrscourse.cooking.messages.Message
 
 class SimplePublisher implements Publisher, HasTopicStats {
     private final Map<String, Set<Handles>> subscribers = [:]
 
     def <T> void publish(T body) {
-        def wrapper = MessageBase.newExchange(body)
+        def wrapper = Message.newExchange(body)
         publish(body.class.name, wrapper)
         publish(wrapper.corrId, wrapper)
     }
 
     def <T> void publish(T body, String corrId) {
-        def wrapper = MessageBase.newExchange(body, corrId)
+        def wrapper = Message.newExchange(body, corrId)
         publish(body.class.name, wrapper)
         publish(wrapper.corrId, wrapper)
     }
 
-    def <T> void respondTo(MessageBase<?> source, T body) {
+    def <T> void respondTo(Message<?> source, T body) {
         respondTo(source, body.class.name, body)
     }
 
-    def <T> void respondTo(MessageBase<?> source, String target, T body) {
-        MessageBase<T> wrapper = source.buildResponse(body)
+    def <T> void respondTo(Message<?> source, String target, T body) {
+        Message<T> wrapper = source.buildResponse(body)
         publish(target, wrapper)
         publish(wrapper.corrId, wrapper)
     }
 
-    public <M extends MessageBase> void publish(String topic, M msg) {
+    public <M extends Message> void publish(String topic, M msg) {
         def exchange = new SimpleExchange<M>(
                 publisher: this,
                 sourceTopic: topic,
@@ -79,7 +79,7 @@ class SimplePublisher implements Publisher, HasTopicStats {
     public static class SimpleExchange<T> implements Exchange<T> {
         SimplePublisher publisher
         String sourceTopic
-        MessageBase<T> message
+        Message<T> message
 
         String getCorrId() {
             return message.corrId

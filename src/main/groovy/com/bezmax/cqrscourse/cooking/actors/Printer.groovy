@@ -19,7 +19,8 @@ class Printer implements Handles<OrderCompleted>, HasQueueStats {
     void handle(Exchange<OrderCompleted> exchange, OrderCompleted msg) {
         LOGGER.debug("Printer received $exchange")
         counter.incrementAndGet()
-        LOGGER.info(msg.order.serialize())
+        LOGGER.trace(msg.order.serialize())
+        LOGGER.info("Printing order {}", msg.order.id)
     }
 
     List<MessageStats> getQueueStats() {

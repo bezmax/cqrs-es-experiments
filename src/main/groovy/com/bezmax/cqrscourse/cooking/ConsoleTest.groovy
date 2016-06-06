@@ -56,7 +56,12 @@ class ConsoleTest {
 
         post("/addOrders/:count", {req, resp ->
             int count = Integer.valueOf(req.params("count"))
-            strategy.addOrders(count)
+            strategy.addOrders(count, false)
+        });
+
+        post("/addOrdersShady/:count", {req, resp ->
+            int count = Integer.valueOf(req.params("count"))
+            strategy.addOrders(count, true)
         });
     }
 }

@@ -2,6 +2,6 @@ package com.bezmax.cqrscourse.cooking.messages.commands
 
 import com.bezmax.cqrscourse.cooking.Order
 
-class CollectPayment {
+class RetryCooking {
     Order order
 }

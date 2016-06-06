@@ -1,20 +1,20 @@
 package com.bezmax.cqrscourse.cooking.messages
 
 
-class MessageBase<T> {
+class Message<T> {
     UUID msgId
     UUID causeId
     String corrId
 
     T body
 
-    public static <M> MessageBase<M> newExchange(M body) {
+    public static <M> Message<M> newExchange(M body) {
         return newExchange(body, UUID.randomUUID().toString())
     }
 
-    public static <M> MessageBase<M> newExchange(M body, String corrId) {
+    public static <M> Message<M> newExchange(M body, String corrId) {
         def id = UUID.randomUUID()
-        return new MessageBase<M>(
+        return new Message<M>(
                 msgId: id,
                 corrId: corrId,
                 causeId: id,
@@ -22,8 +22,8 @@ class MessageBase<T> {
         )
     }
 
-    public <M> MessageBase<M> buildResponse(M body) {
-        return new MessageBase<M>(
+    public <M> Message<M> buildResponse(M body) {
+        return new Message<M>(
                 msgId: UUID.randomUUID(),
                 corrId: this.corrId,
                 causeId: this.msgId,
@@ -31,7 +31,7 @@ class MessageBase<T> {
         )
     }
 
-    private MessageBase() {
+    private Message() {
     }
 
     @Override

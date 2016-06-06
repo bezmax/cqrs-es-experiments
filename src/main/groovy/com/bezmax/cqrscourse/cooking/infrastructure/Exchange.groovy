@@ -1,11 +1,11 @@
 package com.bezmax.cqrscourse.cooking.infrastructure
 
-import com.bezmax.cqrscourse.cooking.messages.MessageBase
+import com.bezmax.cqrscourse.cooking.messages.Message
 
 
 interface Exchange<T> {
     String getSourceTopic()
-    MessageBase<T> getMessage()
+    Message<T> getMessage()
     String getCorrId()
 
     public <R> void respond(R response)

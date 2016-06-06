@@ -24,7 +24,7 @@ class AssistantManager implements Handles<PriceOrder> {
     }
 
     void handle(Exchange<PriceOrder> exchange, PriceOrder msg) {
-        LOGGER.debug("Assistant Manager: {}", exchange)
+        LOGGER.info("Assistant Manager: {}", exchange)
 
         Order o = msg.order
         o.total = 0

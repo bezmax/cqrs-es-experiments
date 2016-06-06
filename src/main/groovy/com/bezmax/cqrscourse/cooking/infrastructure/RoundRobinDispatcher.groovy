@@ -1,11 +1,11 @@
 package com.bezmax.cqrscourse.cooking.infrastructure
 
 import com.bezmax.cqrscourse.cooking.Handles
-import com.bezmax.cqrscourse.cooking.messages.MessageBase
+import com.bezmax.cqrscourse.cooking.messages.Message
 import org.slf4j.LoggerFactory
 
 
-class RoundRobinDispatcher<M extends MessageBase> implements Handles<M> {
+class RoundRobinDispatcher<M extends Message> implements Handles<M> {
     static LOGGER = LoggerFactory.getLogger(RoundRobinDispatcher)
     Queue<Handles<M>> orderHandlers
 

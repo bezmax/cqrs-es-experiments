@@ -1,10 +1,10 @@
 package com.bezmax.cqrscourse.cooking.infrastructure
 
 import com.bezmax.cqrscourse.cooking.Handles
-import com.bezmax.cqrscourse.cooking.messages.MessageBase
+import com.bezmax.cqrscourse.cooking.messages.Message
 
 
-class Multiplexer<M extends MessageBase> implements Handles<M> {
+class Multiplexer<M extends Message> implements Handles<M> {
     List<Handles<M>> orderHandlers
 
     void handle(Exchange<M> exchange, M msg) {

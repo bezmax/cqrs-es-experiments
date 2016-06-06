@@ -19,7 +19,7 @@ class Cook implements Handles<CookFood> {
     def cookTime = 3000
 
     void handle(Exchange<CookFood> exchange, CookFood msg) {
-        LOGGER.debug("{}: {}", this, exchange)
+        LOGGER.info("{}: {}", this, exchange)
         Order o = msg.order
         o.ingredients = o.items.collect {cookbook[it.item]}.join(", ")
         Thread.sleep(cookTime)

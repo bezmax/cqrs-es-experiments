@@ -14,7 +14,7 @@ class Cashier implements Handles<CollectPayment> {
     def name
 
     void handle(Exchange<CollectPayment> exchange, CollectPayment msg) {
-        LOGGER.debug("Cashier: {}", exchange)
+        LOGGER.info("Cashier: {}", exchange)
 
         Order o = msg.order
         o.paid = true
